@@ -1,0 +1,3 @@
+db.db('chopper')
+use chopper
+db.auth
