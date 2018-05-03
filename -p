@@ -1,0 +1,3 @@
+MongoDB shell version: 2.6.10
+connecting to: ds159489.mlab.com:59489/chopper
+2018-05-03T16:55:06.417+0000 Error: 4 Missing expected field "pwd" at src/mongo/shell/db.js:1287
