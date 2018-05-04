@@ -18,16 +18,16 @@ app.get("/", function (request, response) {
 }) 
   
 app.route('/new/*').get(function(req, res) {
-    process.env.ID += 1
+    process.env.ID = parseInt(process.env.ID) + 1
     var mongo = require('mongodb').MongoClient
     var mongo_url = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.PORT+'/'+process.env.DB
     mongo.connect(mongo_url, function(err,db) {
     if (err) {console.log('Error occured')}
     var urls = db.db('chopper').collection('urls')
     var short_url = 'https://observant-carrot.glitch.me/' + process.env.ID
-    urls.insert([{ "_id": process.env.ID,"url": req.url.slice(5) }])    
+    urls.insert([{ "_id": parseInt(process.env.ID),"url": req.url.slice(5) }])    
     res.send({ "original_url": req.url.slice(5), "short_url": short_url }) 
-    db.close()  
+    db.close()
       
     
     })
