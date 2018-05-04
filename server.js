@@ -16,18 +16,35 @@ app.get("/", function (request, response) {
     response.sendFile(__dirname + '/views/index.html');    
 }) 
   
-app.get("/new/", function(req, res) {
+app.route('/new/*').get(function(req, res) {
     var mongo = require('mongodb').MongoClient
     var mongo_url = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.PORT+'/'+process.env.DB
     mongo.connect(mongo_url, function(err,db) {
     if (err) {console.log('Error occured')}
     var urls = db.db('chopper').collection('urls')
-    urls.insert([{"url": req.url }])
-    res.send(req.url.split('/')[2])
+    urls.insert([{"url": req.url.slice(5) }])
+    
+    urls.find([{ "url": req.url.slice(5) }] function(err,doc) {
+      short_url += 'https://observant-carrot.glitch.me/' + doc['_id']}              
+    )
+    res.send({ "original_url": req.url.slice(5), "short_url": short_url })
+    db.close()  
+       
+    
+    })
+})
+
+app.route('/d+').get(function(req, res) {
+    var mongo = require('mongodb').MongoClient
+    var mongo_url = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.PORT+'/'+process.env.DB
+    mongo.connect(mongo_url, function(err,db) {
+    if (err) {console.log('Error occured')}
+    var urls = db.db('chopper').collection('urls')
+    urls.insert([{"url": req.url.slice(5) }])
+    res.send(req.url.slice(5))    
     db.close()
     })
 })
-  
 
 
 
