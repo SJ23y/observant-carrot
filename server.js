@@ -12,9 +12,23 @@ var app = express();
 app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/index.html');
-});
+app.get("/", function (request, response) {  
+    response.sendFile(__dirname + '/views/index.html');    
+}) 
+  
+app.get("/new/", function(req, res) {
+    var mongo = require('mongodb').MongoClient
+    var mongo_url = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.PORT+'/'+process.env.DB
+    mongo.connect(mongo_url, function(err,db) {
+    if (err) {console.log('Error occured')}
+    var urls = db.db('chopper').collection('urls')
+    urls.insert([{"_id": 1, "url": 'https://yandex.ru'}])
+    db.close()
+    })
+})
+  
+
+
 
 // listen for requests :)
 var listener = app.listen('3000', function () {
