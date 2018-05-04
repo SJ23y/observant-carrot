@@ -22,12 +22,11 @@ app.route('/new/*').get(function(req, res) {
     mongo.connect(mongo_url, function(err,db) {
     if (err) {console.log('Error occured')}
     var urls = db.db('chopper').collection('urls')
-    urls.insert([{"url": req.url.slice(5) }])
-    var short_url = urls.find({ "url": req.url.slice(5)}, {"_id": 1, "url": 0 }).toArray()
-    
-    res.send({ "original_url": req.url.slice(5), "short_url": short_url[0] })
+    urls.insert([{ "_id": {}, "url": req.url.slice(5) }])
+    var short_url = urls.find({ "url": req.url.slice(5)}, {"_id": 1, "url": 0 }) 
+    res.send({ "original_url": req.url.slice(5), "short_url": short_url.next() }) 
     db.close()  
-       
+      
     
     })
 })
