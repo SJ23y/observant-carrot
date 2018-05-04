@@ -22,7 +22,8 @@ app.get("/new/", function(req, res) {
     mongo.connect(mongo_url, function(err,db) {
     if (err) {console.log('Error occured')}
     var urls = db.db('chopper').collection('urls')
-    urls.insert([{"_id": 1, "url": 'https://yandex.ru'}])
+    urls.insert([{"url": req.url }])
+    res.send(req.url.split('/')[2])
     db.close()
     })
 })
