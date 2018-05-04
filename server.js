@@ -23,11 +23,9 @@ app.route('/new/*').get(function(req, res) {
     if (err) {console.log('Error occured')}
     var urls = db.db('chopper').collection('urls')
     urls.insert([{"url": req.url.slice(5) }])
+    var short_url = urls.find({ "url": req.url.slice(5)}, {"_id": 1, "url": 0 }).toArray()
     
-    urls.find([{ "url": req.url.slice(5) }] function(err,doc) {
-      short_url += 'https://observant-carrot.glitch.me/' + doc['_id']}              
-    )
-    res.send({ "original_url": req.url.slice(5), "short_url": short_url })
+    res.send({ "original_url": req.url.slice(5), "short_url": short_url[0] })
     db.close()  
        
     
