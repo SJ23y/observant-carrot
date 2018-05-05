@@ -40,7 +40,7 @@ app.route('/[1-9]+').get(function(req, res) {
     if (err) {res.send('Error occured')}
     var urls = db.db('chopper').collection('urls')    
     
-    res.send(urls.find([ { "_id": req.url.slice(1) }]).toArray())    
+    res.send(urls.find([ { "_id": parseInt(req.url.slice(1)) }]).toArray())    
     db.close()
     })
 })
