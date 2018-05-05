@@ -23,14 +23,17 @@ app.route('/new/*').get(function(req, res) {
     mongo.connect(mongo_url, function(err,db) {      
     if (err) {console.log('Error occured')}    
     var urls = db.db('chopper').collection('urls')
-    var ID = urls.count() + 1   
-    var short_url = 'https://observant-carrot.glitch.me/' + ID
-    urls.insert([{ "_id": parseInt(ID),"url": req.url.slice(5) }])    
-    res.send({ "original_url": req.url.slice(5), "short_url": short_url, "id": ID }) 
-    db.close()
-      
+    urls.aggregate( [ { $group : {'_id': null, count: { $sum: 1 } } } ] ).toArray(function(err, doc) {
+        var ID = doc[0].count
+        var short_url = 'https://observant-carrot.glitch.me/' + ID
+        urls.insert( [ { "_id": parseInt(ID),"url": req.url.slice(5) } ] )    
+        res.send( { "original_url": req.url.slice(5), "short_url": short_url } ) 
+        db.close()
+    
+  })  
     
     })
+  
 })
 
 app.route('/[1-9]+').get(function(req, res) {
