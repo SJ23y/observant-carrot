@@ -18,15 +18,15 @@ app.get("/", function (request, response) {
 }) 
   
 app.route('/new/*').get(function(req, res) {
-    process.env.ID = parseInt(process.env.ID) + 1
     var mongo = require('mongodb').MongoClient
     var mongo_url = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.PORT+'/'+process.env.DB
-    mongo.connect(mongo_url, function(err,db) {
-    if (err) {console.log('Error occured')}
+    mongo.connect(mongo_url, function(err,db) {      
+    if (err) {console.log('Error occured')}    
     var urls = db.db('chopper').collection('urls')
-    var short_url = 'https://observant-carrot.glitch.me/' + process.env.ID
-    urls.insert([{ "_id": parseInt(process.env.ID),"url": req.url.slice(5) }])    
-    res.send({ "original_url": req.url.slice(5), "short_url": short_url }) 
+    var ID = urls.count() + 1   
+    var short_url = 'https://observant-carrot.glitch.me/' + ID
+    urls.insert([{ "_id": parseInt(ID),"url": req.url.slice(5) }])    
+    res.send({ "original_url": req.url.slice(5), "short_url": short_url, "id": ID }) 
     db.close()
       
     
@@ -40,7 +40,7 @@ app.route('/[1-9]+').get(function(req, res) {
     if (err) {res.send('Error occured')}
     var urls = db.db('chopper').collection('urls')    
     urls.find( { "_id": parseInt(req.url.slice(1)) } ).toArray(function(err, doc) {
-      res.send(doc[0].url)
+      res.redirect(doc[0].url)
     })      
     db.close()
     })
