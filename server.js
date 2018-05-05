@@ -39,8 +39,9 @@ app.route('/[1-9]+').get(function(req, res) {
     mongo.connect(mongo_url, function(err,db) {
     if (err) {res.send('Error occured')}
     var urls = db.db('chopper').collection('urls')    
-    
-    res.send(urls.find([ { "_id": parseInt(req.url.slice(1)) }]).toArray())    
+    urls.find( { "_id": parseInt(req.url.slice(1)) } ).toArray(function(err, doc) {
+      res.send(doc[0].url)
+    })      
     db.close()
     })
 })
