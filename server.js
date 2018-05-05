@@ -42,7 +42,7 @@ app.route('/new/*').get(function(req, res) {
   
 })
 
-app.route('/[1-9]+').get(function(req, res) {
+app.route('/[0-9]+').get(function(req, res) {
     var mongo = require('mongodb').MongoClient
     var mongo_url = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.PORT+'/'+process.env.DB
     mongo.connect(mongo_url, function(err,db) {
