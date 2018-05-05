@@ -21,7 +21,8 @@ app.route('/new/*').get(function(req, res) {
     var mongo = require('mongodb').MongoClient
     var mongo_url = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.PORT+'/'+process.env.DB
     mongo.connect(mongo_url, function(err,db) {      
-    if (err) {console.log('Error occured')}    
+    if (err) {console.log('Error occured')}
+      if (req.url.slice(5).match('')) {}
     var urls = db.db('chopper').collection('urls')
     urls.aggregate( [ { $group : {'_id': null, count: { $sum: 1 } } } ] ).toArray(function(err, doc) {
         var ID = doc[0].count
