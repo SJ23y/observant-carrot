@@ -33,14 +33,14 @@ app.route('/new/*').get(function(req, res) {
     })
 })
 
-app.route('/d+').get(function(req, res) {
+app.route('/[1-9]+').get(function(req, res) {
     var mongo = require('mongodb').MongoClient
     var mongo_url = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.PORT+'/'+process.env.DB
     mongo.connect(mongo_url, function(err,db) {
-    if (err) {console.log('Error occured')}
-    var urls = db.db('chopper').collection('urls')
-    urls.insert([{"url": req.url.slice(5) }])
-    res.send(req.url.slice(5))    
+    if (err) {res.send('Error occured')}
+    var urls = db.db('chopper').collection('urls')    
+    
+    res.send(urls.find([ { "_id": req.url.slice(1) }]).toArray())    
     db.close()
     })
 })
