@@ -22,10 +22,10 @@ app.route('/new/*').get(function(req, res) {
     var mongo_url = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.PORT+'/'+process.env.DB
     mongo.connect(mongo_url, function(err,db) {      
     if (err) {console.log('Error occured')}
-      var patt = new RegExp('https?:\/\/[\w\d\.-]+\.\w{2,3}')
-      if (!patt.test(req.url.slice(5))) 
+      var patt = /https?:\/\/[\w\d\.-]+\.\w{2,3}/
+      if (req.url.slice(5).match(patt) === null) 
       {
-        res.send(req.url.slice(5))
+        res.send('Invalid Url')
         db.close()
       } else {
         var urls = db.db('chopper').collection('urls')
