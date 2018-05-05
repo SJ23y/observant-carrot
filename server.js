@@ -22,7 +22,8 @@ app.route('/new/*').get(function(req, res) {
     var mongo_url = 'mongodb://'+process.env.USER+':'+process.env.PASS+'@'+process.env.HOST+':'+process.env.PORT+'/'+process.env.DB
     mongo.connect(mongo_url, function(err,db) {      
     if (err) {console.log('Error occured')}
-      if (req.url.slice(5).match('^[http|https]\/\/:[.+?\.]+[\.\w+]{2,3}') == null) 
+      var patt = new RegExp('^(http|https):\/\/.+\.\w{2,3}')
+      if (req.url.slice(5).match(patt) == null) 
       {
         res.send('Invalid Url')
         db.close()                                                                                
