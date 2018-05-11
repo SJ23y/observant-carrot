@@ -30,7 +30,7 @@ app.route('/new/*').get(function(req, res) {
       } else {
         var urls = db.db('chopper').collection('urls')
             urls.aggregate( [ { $group : {'_id': null, count: { $sum: 1 } } } ] ).toArray(function(err, doc) {
-            var ID = doc[0].count
+            var ID = doc[0].count + 1
             var short_url = 'https://observant-carrot.glitch.me/' + ID
             urls.insert( [ { "_id": parseInt(ID),"url": req.url.slice(5) } ] )    
             res.send( { "original_url": req.url.slice(5), "short_url": short_url } ) 
